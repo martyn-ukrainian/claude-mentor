@@ -24,46 +24,67 @@
 
 ## Технічна база
 
-Голосова частина живе окремо: [`~/development/TTS-piper/voice-agent`](https://github.com/kontstantinsm1/TTS-piper) (локальний Pipecat-сервер).
+Голосова частина живе окремо у [`~/development/TTS-piper/voice-claude`](https://github.com/kontstantinsm1/TTS-piper) — локальний Pipecat-сервер, спроектований під інтеграцію з Claude Code (session ID, SSE-стрім транскрипту, готовий launcher).
 
 **Стек:**
 - STT — Deepgram (nova-3)
 - LLM — OpenAI GPT-4.1
 - TTS — Cartesia (sonic-3)
-- Transport — WebRTC P2P (браузер ↔ localhost, без Daily/CDN)
+- Transport — WebRTC P2P (браузер ↔ localhost) **або** LocalAudioTransport (термінал, без браузера)
 
-**Запуск сесії:**
+**Два варіанти запуску:**
 
-```bash
-cd ~/development/TTS-piper/voice-agent && ./start-local.sh
-```
+1. **Браузер (повний UX)** — WebRTC, візуальний контроль сесії:
 
-Відкриваєш URL зі згенерованим flow:
+   ```bash
+   cd ~/development/TTS-piper/voice-claude
+   ./launch.sh eli5-ua_ml-phase0-03-numpy-basics_feynman
+   ```
 
-```
-http://127.0.0.1:8000/?flow=eli5-ua_ml-phase0-01-python-basics_feynman&autostart=1
-```
+   Скрипт робить усе: піднімає сервер (якщо не живий), підписується на SSE-стрім транскрипту у `/tmp/voice-claude-<session-id>.log`, відкриває браузер з `autostart=1`.
 
-URL-параметр `flow=X` підтягує `flows/X.json`, будує system prompt через `build_prompt.py`, `autostart=1` — одразу починає розмову.
+2. **Термінал (швидка сесія, без вкладок)** — LocalAudioTransport, транскрипт прямо в stdout:
+
+   ```bash
+   cd ~/development/TTS-piper/voice-claude
+   uv run python bot_cli.py --flow eli5-ua_ml-phase0-03-numpy-basics_feynman > /tmp/voice-live.log 2>&1
+   ```
+
+   Це найлегша форма для 5-хв retrieval — жодного сервера, жодного браузера, мікрофон береться напряму.
+
+*Історична довідка:* `voice-agent/` у тому ж репо — попередник voice-claude, орієнтований лише на браузер. Для ML Learning workflow використовуємо voice-claude.
 
 ### Launch protocol — що Claude робить коли ти кажеш "запусти"
 
-Це інструкція для мене, не для тебе. Коли ти сказав "запусти" (після ревʼю flow або окремим повідомленням) — я виконую три кроки без додаткових питань:
+Це інструкція для мене, не для тебе. Коли ти сказав "запусти" (після ревʼю flow або окремим повідомленням) — я виконую один із двох сценаріїв:
 
-1. **Health-check серверу.** `curl -sf http://127.0.0.1:8000/health` (з `-f` щоб exit code показав чи живий).
-2. **Якщо не запущений** — `cd ~/development/TTS-piper/voice-agent && ./start-local.sh` у background. Чекаю ~5с, повторюю health-check. Якщо не піднявся — читаю логи і чесно кажу що не так, а не роблю вигляд що все ок.
-3. **Відкриваю URL** — `open "http://127.0.0.1:8000/?flow={name}&autostart=1"`. На macOS це відкриє браузер за замовчуванням.
+**Браузерний (за замовчуванням):**
 
-**Не залишати юзеру "тепер відкрий сам у браузері".** Це ламає workflow. Якщо якийсь крок падає — кажу конкретну причину і що робити далі.
+```bash
+cd ~/development/TTS-piper/voice-claude && ./launch.sh {flow-name}
+```
 
-Якщо flow-файлу ще нема (тобто "запусти" сказано без попереднього ревʼю) — спочатку показую draft, чекаю "ок", тоді lauch. Порядок: **ревʼю → save → launch**, не навпаки.
+`launch.sh` уже інкапсулює health-check → nohup-старт сервера → SSE-підписку → `open URL`. Мені більше не треба виконувати ці кроки руками. Перший старт сервера може тривати ~45с через lazy Pipecat imports — скрипт це знає і чекає.
+
+**Термінальний (для коротких сесій або якщо ти просиш "швидко"):**
+
+```bash
+cd ~/development/TTS-piper/voice-claude && uv run python bot_cli.py --flow {flow-name} > /tmp/voice-live.log 2>&1 &
+```
+
+Транскрипт летить у `/tmp/voice-live.log` — я можу читати `tail -f` під час сесії.
+
+**Загальні правила:**
+- Не залишати юзеру "тепер відкрий сам у браузері" — це ламає workflow.
+- Якщо flow-файлу ще нема — спочатку draft на ревʼю, тоді save, тільки потім launch. Порядок: **ревʼю → save → launch**, не навпаки.
+- Якщо якийсь крок падає — читаю `/tmp/voice-claude-server.log` і кажу конкретну причину, не роблю вигляд що все ок.
 
 ## Життєвий цикл flow-файлу
 
 1. **Створюється** — під час `/end-lesson` як draft, згенерований з розділів "Що це" / "Розбір" / "Gotchas" щойно записаного уроку в `docs/`.
 2. **Ревʼю** — Claude показує 3-5 питань + follow-ups, я кажу "ок / підправ / пропусти". Без явного "ок" — не зберігається.
-3. **Використовується** — файл лежить у `voice-agent/flows/`, URL — у закладках браузера.
-4. **Архівується** — через місяць переїжджає у `voice-agent/flows/archive/`. Не видаляти: старі flow цінні для ретроаналізу росту.
+3. **Використовується** — файл лежить у `voice-claude/flows/`, запуск через `./launch.sh <flow>` або `bot_cli.py --flow <flow>`.
+4. **Архівується** — через місяць переїжджає у `voice-claude/flows/archive/`. Не видаляти: старі flow цінні для ретроаналізу росту.
 
 ## Post-session review — калібрація profile.md
 
@@ -73,7 +94,7 @@ URL-параметр `flow=X` підтягує `flows/X.json`, будує system
 
 Після сесії кажеш мені *"перевір голосову"* (будь-яка варіація). Я:
 
-1. Читаю останній транскрипт з `~/development/TTS-piper/voice-agent/transcripts/*.json`.
+1. Читаю транскрипт із `/tmp/voice-claude-<session-id>.log` (браузерна сесія через `launch.sh`) або з `/tmp/voice-live.log` (термінальна через `bot_cli.py`). Для довшого архіву — `~/development/TTS-piper/voice-claude/transcripts/*.json`.
 2. Порівнюю з flow-файлом, за яким йшла сесія — там уже прописані `evaluation_criteria`, `red_flags`, `strong_markers`. Готова рамка оцінки, не вигадую з голови.
 3. Ідентифікую по транскрипту:
    - **Впевнено пояснив** — відповідав без довгих пауз, слова точні, концепти не плутав.
@@ -114,7 +135,7 @@ python-basics:
 - `tutor-ua_ml-phase0-02-type-hints_retrieval.json`
 - `tech-ua_ml-phase0_final_hard.json`
 
-`mode` — з наявних у `voice-agent/build_prompt.py`: `eli5-ua`, `tutor-ua`, `tech-ua`.
+`mode` — з наявних у `voice-claude/build_prompt.py`: `eli5-ua`, `tutor-ua`, `tech-ua`, `english-tutor`, `english-conversation`.
 
 ## Personas
 
@@ -167,12 +188,14 @@ python-basics:
 
 ## Roadmap
 
-- ✅ `voice-agent` з режимами `eli5-ua`, `tutor-ua`, `tech-ua` (готове, взяте з попередніх проектів)
-- ✅ Launch protocol (health-check → start server → open browser) — задокументовано
+- ✅ `voice-claude` з режимами `eli5-ua`, `tutor-ua`, `tech-ua`, `english-tutor`, `english-conversation` (готове)
+- ✅ Launch protocol через `./launch.sh` — health-check, nohup-старт сервера, SSE-стрім у `/tmp/voice-claude-<sid>.log`, `open URL`
+- ✅ Термінальний варіант `bot_cli.py` — LocalAudioTransport, транскрипт у stdout, без сервера і браузера
 - 🚧 Автогенерація Feynman flow у `/end-lesson` — v1
 - 🚧 Post-session review — читання транскрипту → оновлення `memories/profile.md` + `memories/lessons/`
 - ⏳ Retrieval flow на старті сесії — після того, як буде ≥3 закритих уроки для розносу в часі
 - ⏳ Mock Interview на закритті фази — на кінець Фази 0
+- ⏳ **Adaptive flow** — моніторинг live-транскрипту через SSE, генерація наступних питань на льоту з урахуванням щойно почутого. Замість статичних 5 питань — живий співрозмовник. Детально в `voice-claude/IDEAS.md`.
 
 ## Джерела
 
