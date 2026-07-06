@@ -1,13 +1,32 @@
-# Private mentor prep — cheat-sheets, research notes
+# ─── Secrets — API keys, tokens, credentials ────────────────────────
+# Патерни без leading `/` — ловлять на будь-якій глибині.
+# Якщо будь-де в дереві зʼявиться .env з реальними ключами, git його не побачить.
+.env
+.env.local
+.env.production
+.env.development
+*.key
+*.pem
+secrets.json
+credentials.json
+
+# ─── Private mentor prep ────────────────────────────────────────────
+# Cheat-sheets, research notes — для мене (ментора), не для читача
 lessons/
 
-# Personal knowledge profile + lesson session notes
+# ─── Personal knowledge profile ─────────────────────────────────────
+# Живий профіль знань + сесійні нотатки — приватне
 memories/
 
-# Local Claude Code settings
+# ─── Local tooling settings ─────────────────────────────────────────
 .claude/
 
-# Python
+# ─── Voice-agent runtime data ───────────────────────────────────────
+# Транскрипти голосових сесій можуть містити особисту інформацію
+transcripts/
+tmp/
+
+# ─── Python ─────────────────────────────────────────────────────────
 __pycache__/
 *.pyc
 *.pyo
@@ -18,14 +37,17 @@ venv/
 .venv/
 env/
 
-# Jupyter
+# ─── Jupyter ────────────────────────────────────────────────────────
 .ipynb_checkpoints/
 
-# OS
+# ─── Node ───────────────────────────────────────────────────────────
+node_modules/
+
+# ─── OS ─────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 
-# Editor
+# ─── Editor ─────────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
