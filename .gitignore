@@ -26,6 +26,10 @@ memories/
 transcripts/
 tmp/
 
+# Symlink voice/transcripts → ../memories/transcripts (локальне рішення,
+# не commit-имо ні сам симлінк, ні його ціль — memories/ уже ігнорується)
+voice/transcripts
+
 # ─── Python ─────────────────────────────────────────────────────────
 __pycache__/
 *.pyc

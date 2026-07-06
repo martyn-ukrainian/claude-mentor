@@ -24,7 +24,7 @@
 
 ## Технічна база
 
-Голосова частина живе окремо у [`~/development/TTS-piper/voice-claude`](https://github.com/kontstantinsm1/TTS-piper) — локальний Pipecat-сервер, спроектований під інтеграцію з Claude Code (session ID, SSE-стрім транскрипту, готовий launcher).
+Голосова частина живе прямо в репо у [`voice/`](./voice) — локальний Pipecat-сервер, спроектований під інтеграцію з Claude Code (session ID, SSE-стрім транскрипту, готовий launcher).
 
 **Стек:**
 - STT — Deepgram (nova-3)
@@ -32,12 +32,20 @@
 - TTS — Cartesia (sonic-3)
 - Transport — WebRTC P2P (браузер ↔ localhost) **або** LocalAudioTransport (термінал, без браузера)
 
+**Setup (одноразово):**
+
+```bash
+cd voice
+cp .env.example .env         # додай OPENAI_API_KEY, DEEPGRAM_API_KEY, CARTESIA_API_KEY
+uv sync                       # створить .venv і встановить залежності
+```
+
 **Два варіанти запуску:**
 
 1. **Браузер (повний UX)** — WebRTC, візуальний контроль сесії:
 
    ```bash
-   cd ~/development/TTS-piper/voice-claude
+   cd voice
    ./launch.sh eli5-ua_ml-phase0-03-numpy-basics_feynman
    ```
 
@@ -46,13 +54,15 @@
 2. **Термінал (швидка сесія, без вкладок)** — LocalAudioTransport, транскрипт прямо в stdout:
 
    ```bash
-   cd ~/development/TTS-piper/voice-claude
+   cd voice
    uv run python bot_cli.py --flow eli5-ua_ml-phase0-03-numpy-basics_feynman > /tmp/voice-live.log 2>&1
    ```
 
    Це найлегша форма для 5-хв retrieval — жодного сервера, жодного браузера, мікрофон береться напряму.
 
-*Історична довідка:* `voice-agent/` у тому ж репо — попередник voice-claude, орієнтований лише на браузер. Для ML Learning workflow використовуємо voice-claude.
+**Транскрипти** — `voice/transcripts` є симлінком на `memories/transcripts/` (все приватне в одному місці; `memories/` уже в `.gitignore`). Voice-claude пише за своїм дефолтним шляхом, файли фізично лежать у `memories/transcripts/{session-id}.json`.
+
+*Походження:* код форкнутий з `~/development/TTS-piper/voice-claude` (локальний тулінг). Тут — та копія, яку розвиваємо під ML Learning workflow.
 
 ### Launch protocol — що Claude робить коли ти кажеш "запусти"
 
@@ -61,7 +71,7 @@
 **Браузерний (за замовчуванням):**
 
 ```bash
-cd ~/development/TTS-piper/voice-claude && ./launch.sh {flow-name}
+cd voice && ./launch.sh {flow-name}
 ```
 
 `launch.sh` уже інкапсулює health-check → nohup-старт сервера → SSE-підписку → `open URL`. Мені більше не треба виконувати ці кроки руками. Перший старт сервера може тривати ~45с через lazy Pipecat imports — скрипт це знає і чекає.
@@ -69,7 +79,7 @@ cd ~/development/TTS-piper/voice-claude && ./launch.sh {flow-name}
 **Термінальний (для коротких сесій або якщо ти просиш "швидко"):**
 
 ```bash
-cd ~/development/TTS-piper/voice-claude && uv run python bot_cli.py --flow {flow-name} > /tmp/voice-live.log 2>&1 &
+cd voice && uv run python bot_cli.py --flow {flow-name} > /tmp/voice-live.log 2>&1 &
 ```
 
 Транскрипт летить у `/tmp/voice-live.log` — я можу читати `tail -f` під час сесії.
@@ -83,8 +93,8 @@ cd ~/development/TTS-piper/voice-claude && uv run python bot_cli.py --flow {flow
 
 1. **Створюється** — під час `/end-lesson` як draft, згенерований з розділів "Що це" / "Розбір" / "Gotchas" щойно записаного уроку в `docs/`.
 2. **Ревʼю** — Claude показує 3-5 питань + follow-ups, я кажу "ок / підправ / пропусти". Без явного "ок" — не зберігається.
-3. **Використовується** — файл лежить у `voice-claude/flows/`, запуск через `./launch.sh <flow>` або `bot_cli.py --flow <flow>`.
-4. **Архівується** — через місяць переїжджає у `voice-claude/flows/archive/`. Не видаляти: старі flow цінні для ретроаналізу росту.
+3. **Використовується** — файл лежить у `voice/flows/`, запуск через `./launch.sh <flow>` або `bot_cli.py --flow <flow>`.
+4. **Архівується** — через місяць переїжджає у `voice/flows/archive/`. Не видаляти: старі flow цінні для ретроаналізу росту.
 
 ## Post-session review — калібрація profile.md
 
@@ -94,7 +104,7 @@ cd ~/development/TTS-piper/voice-claude && uv run python bot_cli.py --flow {flow
 
 Після сесії кажеш мені *"перевір голосову"* (будь-яка варіація). Я:
 
-1. Читаю транскрипт із `/tmp/voice-claude-<session-id>.log` (браузерна сесія через `launch.sh`) або з `/tmp/voice-live.log` (термінальна через `bot_cli.py`). Для довшого архіву — `~/development/TTS-piper/voice-claude/transcripts/*.json`.
+1. Читаю транскрипт із `/tmp/voice-claude-<session-id>.log` (браузерна сесія через `launch.sh`) або з `/tmp/voice-live.log` (термінальна через `bot_cli.py`). Персистентний архів — `memories/transcripts/*.json` (voice-claude пише туди через симлінк `voice/transcripts`).
 2. Порівнюю з flow-файлом, за яким йшла сесія — там уже прописані `evaluation_criteria`, `red_flags`, `strong_markers`. Готова рамка оцінки, не вигадую з голови.
 3. Ідентифікую по транскрипту:
    - **Впевнено пояснив** — відповідав без довгих пауз, слова точні, концепти не плутав.
@@ -135,7 +145,7 @@ python-basics:
 - `tutor-ua_ml-phase0-02-type-hints_retrieval.json`
 - `tech-ua_ml-phase0_final_hard.json`
 
-`mode` — з наявних у `voice-claude/build_prompt.py`: `eli5-ua`, `tutor-ua`, `tech-ua`, `english-tutor`, `english-conversation`.
+`mode` — з наявних у `voice/build_prompt.py`: `eli5-ua`, `tutor-ua`, `tech-ua`, `english-tutor`, `english-conversation`.
 
 ## Personas
 
@@ -188,14 +198,15 @@ python-basics:
 
 ## Roadmap
 
-- ✅ `voice-claude` з режимами `eli5-ua`, `tutor-ua`, `tech-ua`, `english-tutor`, `english-conversation` (готове)
+- ✅ `voice/` — Pipecat-сервер з режимами `eli5-ua`, `tutor-ua`, `tech-ua`, `english-tutor`, `english-conversation`
 - ✅ Launch protocol через `./launch.sh` — health-check, nohup-старт сервера, SSE-стрім у `/tmp/voice-claude-<sid>.log`, `open URL`
 - ✅ Термінальний варіант `bot_cli.py` — LocalAudioTransport, транскрипт у stdout, без сервера і браузера
+- ✅ Транскрипти у `memories/transcripts/` через симлінк — все приватне в одній папці
 - 🚧 Автогенерація Feynman flow у `/end-lesson` — v1
 - 🚧 Post-session review — читання транскрипту → оновлення `memories/profile.md` + `memories/lessons/`
 - ⏳ Retrieval flow на старті сесії — після того, як буде ≥3 закритих уроки для розносу в часі
 - ⏳ Mock Interview на закритті фази — на кінець Фази 0
-- ⏳ **Adaptive flow** — моніторинг live-транскрипту через SSE, генерація наступних питань на льоту з урахуванням щойно почутого. Замість статичних 5 питань — живий співрозмовник. Детально в `voice-claude/IDEAS.md`.
+- ⏳ **Adaptive flow** — моніторинг live-транскрипту через SSE, генерація наступних питань на льоту з урахуванням щойно почутого. Замість статичних 5 питань — живий співрозмовник.
 
 ## Джерела
 
