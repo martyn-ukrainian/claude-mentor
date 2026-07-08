@@ -62,17 +62,21 @@ voice/flows/tmp/lesson-{topic-slug}.json
 - **Мова:** українська, розмовна, без жаргону без миттєвого пояснення, **БЕЗ КОДУ**.
 - **Тривалість opening:** 30-60 секунд говоріння загалом.
 
-## Крок 3 — спавн voice-claude у background
+## Крок 3 — спавн voice-claude у background (термінальний режим)
 
 Використай Bash з `run_in_background: true`:
 
 ```bash
-cd voice && ./launch.sh lesson-{topic-slug}
+cd voice && uv run python bot_cli.py --flow tmp/lesson-{topic-slug} > /tmp/voice-lesson-{topic-slug}.log 2>&1
 ```
 
-`launch.sh` сам робить health-check серверу, nohup-старт якщо не живий, SSE-підписку на транскрипт, і `open` браузера. Одна команда.
+**Чому саме `bot_cli.py`, не `launch.sh`:**
+- `bot_cli.py` використовує `LocalAudioTransport` — голос грає через системний звук macOS. Ніякого браузера, учень лишається в терміналі.
+- `launch.sh` розрахований на повноцінні інтервʼю з браузерним UI. Для intro-теорії коли учень паралельно читає текстовий урок — це перебивання контексту.
 
-Якщо voice-сервер недоступний або учень не хоче голос — крок 3 пропускається gracefully, текстовий урок доставляється як зазвичай.
+Транскрипт летить у `/tmp/voice-lesson-{topic-slug}.log` — можна `tail -f` під час сесії або читати після.
+
+Якщо `bot_cli.py` падає (немає ключів, .env порожній) — крок 3 пропускається gracefully, текстовий урок доставляється як зазвичай.
 
 ## Крок 4 — паралельно писати повний урок у терміналі
 
@@ -87,9 +91,9 @@ cd voice && ./launch.sh lesson-{topic-slug}
 
 ## Крок 5 — після завершення voice-сесії
 
-- Транскрипт автоматично лягає у `memories/transcripts/` через SSE-стрім
+- Транскрипт лежить у `/tmp/voice-lesson-{topic-slug}.log` (stdout з `bot_cli.py`)
 - Ephemeral flow файл лишається в `voice/flows/tmp/` — очиститься на наступному `/end-lesson` або через 24 години
-- Якщо учень скаже "перевір голосову" — читаю транскрипт і оновлюю `memories/profile.md` за правилами Post-session review з `VOICE-TUTORIALS.md`
+- Якщо учень скаже "перевір голосову" — читаю транскрипт (`/tmp/voice-lesson-*.log`) і оновлюю `memories/profile.md` за правилами Post-session review з `VOICE-TUTORIALS.md`
 
 ## Коли НЕ використовувати
 
