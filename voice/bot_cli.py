@@ -116,11 +116,11 @@ class DiagProcessor(FrameProcessor):
 
 
 class WaitForCompletionPhrase(FrameProcessor):
-    """User сам сигналізує кінець своєї черги словом «готово».
+    """User сам сигналізує кінець своєї черги словом «прийом» (радіопротокольне «over»).
     Дропає VAD-shape UserStoppedSpeakingFrame; емітить свій тільки після trigger-слова.
     Trigger видаляється з тексту, який летить в LLM."""
 
-    TRIGGERS = ("готово", "готова", "готове")
+    TRIGGERS = ("прийом", "прийома", "прийоми", "приом", "приьом")
 
     def _strip_trigger(self, text: str) -> tuple[str, bool]:
         lower = text.lower()
@@ -137,7 +137,7 @@ class WaitForCompletionPhrase(FrameProcessor):
         if isinstance(frame, TranscriptionFrame):
             cleaned, triggered = self._strip_trigger(frame.text)
             if triggered:
-                logger.info(f"[TRIGGER] 'готово' detected → flushing turn. clean={cleaned!r}")
+                logger.info(f"[TRIGGER] 'прийом' detected → flushing turn. clean={cleaned!r}")
                 if cleaned:
                     new_frame = TranscriptionFrame(
                         text=cleaned,
@@ -152,7 +152,7 @@ class WaitForCompletionPhrase(FrameProcessor):
             return
 
         if isinstance(frame, UserStoppedSpeakingFrame):
-            logger.info("[WAIT] suppressed VAD UserStoppedSpeakingFrame (чекаю 'готово')")
+            logger.info("[WAIT] suppressed VAD UserStoppedSpeakingFrame (чекаю 'прийом')")
             return
 
         await self.push_frame(frame, direction)
