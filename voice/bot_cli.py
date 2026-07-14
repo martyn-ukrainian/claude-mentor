@@ -116,9 +116,15 @@ class DiagProcessor(FrameProcessor):
 
 
 class WaitForCompletionPhrase(FrameProcessor):
-    """User сам сигналізує кінець своєї черги словом «прийом» (радіопротокольне «over»).
-    Дропає VAD-shape UserStoppedSpeakingFrame; емітить свій тільки після trigger-слова.
-    Trigger видаляється з тексту, який летить в LLM."""
+    """Опційний швидкий turn-end через слово «прийом» (радіопротокольне «over»).
+
+    VAD працює як зазвичай — паузи закривають turn природно. Тригер потрібен коли
+    юзер хоче достроково завершити без чекання stop_secs паузи.
+
+    Ключове: тригер ЛИШЕ **strip-ає** слово з transcription frame що йде далі.
+    Не suppress-ує VAD, не пробує сам форсити flush — цим займається aggregator
+    через свою нормальну реакцію на UserStoppedSpeakingFrame (VAD або тригер).
+    """
 
     TRIGGERS = ("прийом", "прийома", "прийоми", "приом", "приьом")
 
@@ -137,22 +143,19 @@ class WaitForCompletionPhrase(FrameProcessor):
         if isinstance(frame, TranscriptionFrame):
             cleaned, triggered = self._strip_trigger(frame.text)
             if triggered:
-                logger.info(f"[TRIGGER] 'прийом' detected → flushing turn. clean={cleaned!r}")
+                logger.info(f"[TRIGGER] 'прийом' detected → fast flush. clean={cleaned!r}")
                 if cleaned:
+                    # Forward the payload without the trigger word.
                     new_frame = TranscriptionFrame(
                         text=cleaned,
                         user_id=frame.user_id,
                         timestamp=frame.timestamp,
                     )
                     await self.push_frame(new_frame, direction)
+                # Force turn end so aggregator flushes whatever it already buffered.
                 await self.push_frame(UserStoppedSpeakingFrame(), direction)
                 return
-            # No trigger: forward transcript but suppress VAD-driven flush.
             await self.push_frame(frame, direction)
-            return
-
-        if isinstance(frame, UserStoppedSpeakingFrame):
-            logger.info("[WAIT] suppressed VAD UserStoppedSpeakingFrame (чекаю 'прийом')")
             return
 
         await self.push_frame(frame, direction)
