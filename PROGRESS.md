@@ -1,10 +1,12 @@
 # PROGRESS
 
-**Поточна фаза:** Фаза 0 ✅ **completed** → Фаза 1 (математика) **на паузі, 5/8 уроків** → **Фаза 2 в процесі, 1/9+capstone**
+**Поточна фаза:** Фаза 0 ✅ **completed** → Фаза 1 (математика) **на паузі, 5/8 уроків** → **Фаза 2 в процесі, 4/9+capstone**
 
 **Рішення від 2026-07-19:** `lessons/phase-2/` розгорнуто в 9 уроків + capstone (README + методика). Урок 01 (sklearn fundamentals) і Урок 02 (лінійна регресія sklearn, closed-form vs GD, R², multicollinearity) — пройдено.
 
 **Рішення від 2026-07-20:** ПЕРЕД Уроком 03 обов'язково закрити R²-прогалину (7 разів та сама помилка "% правильних відповідей", підтверджено retrieval review + практика на Diabetes dataset + спроба візуалізації — жодна текстова спроба не закріпилась). **Наступний крок — R²-сесія (voice чи новий формат), тільки потім Урок 03 (логістична регресія).**
+
+**R²-прогалина ЗАКРИТА (2026-07-25):** текстовий формат "сам рахує на контрастних прикладах без означення наперед" (A/B/C/D/E: ідеальний, близько без точних збігів, прогноз=середнє, поганий, довільна константа) — спрацював там, де 7 попередніх текстових спроб не заходили. Студент сам вивів фінальне формулювання: "R²=0.7 = модель на 70% менше помиляється за стратегію 'завжди вгадуй середнє'". Деталі й тактика — `memories/profile.md` (секція "R² семантика — закрита") і `memories/voice-retrieval-queue.md` (архів). **Блокер знято — можна рухатись до Уроку 03.**
 
 **Момент сесії Уроку 02:** студент прямо сказав "80% не розумію" посеред Задачі 3 — зупинились, розібрали з нуля. Решта уроку пішла значно впевненіше. Хороший приклад чому не форсувати темп.
 
@@ -22,7 +24,11 @@
 
 **Висновок:** готовий рухатись до Фази 2. "Некомутативність словами" — приймаємо як стабільну, некритичну прогалину (механіка ідеальна), не блокуючий фактор.
 
-**Де зупинились:** Фаза 1, Урок 05 (градієнтний спуск з нуля на NumPy) — пройдено технічно (весь код працює: scalar GD, learning rate exploration, лінійна і multiple regression, нормалізація), але засвоєння за словами студента "слабке". Наступний крок — **retrieval-повторення Фази 1, потім старт Фази 2**.
+**Де зупинились:** Фаза 2, Урок 04 (метрики класифікації: confusion matrix, precision/recall/F1, ROC-AUC, threshold tuning) — пройдено 25.07, та сама сесія одразу після Уроку 03. **Наступний крок — Урок 05 Фази 2 (дерева рішень, Random Forest)** — метрики Уроку 04 (recall, F1) стануть інструментом порівняння моделей.
+
+**Сильна сесія:** студент самостійно придумав числові приклади для precision/recall і самостійно вивів чому accuracy=94% оманлива (розчинення помилки міноритарного класу) — обидва глибше за мінімальний критерій уроку. Єдина нова прогалина — плутанина AUC vs threshold (див. `voice-retrieval-queue.md`).
+
+*(Історичне: Фаза 1, Урок 05 (градієнтний спуск з нуля на NumPy) — пройдено технічно, засвоєння за словами студента було "слабке" на момент 18.07. Retrieval Фази 1 виконано 19.07, див. нижче.)*
 
 **Рішення від 2026-07-13 (порядок фаз):** Фаза 2 первою, не паралельно. Причина: hands-on ML — найшвидший шлях до реального portfolio-об'єкта. Математика в вакуумі (3Blue1Brown без застосування) ризикує стати "перегляданням відео". Коли лінійна регресія не збігається — тоді відкриваємо градієнтний спуск; коли модель overfit-иться — тоді регуляризація і L1/L2 у контексті. Andrew Ng сам будував курс саме так.
 
@@ -104,6 +110,8 @@
 
 - **Урок 01** — sklearn fundamentals: train/test split, Pipeline, fit/transform/predict, data leakage, R² ([docs](docs/phase-2-classical-ml/01-sklearn-fundamentals.md), [memories](memories/lessons/03-01-sklearn-fundamentals.md), [код](code/phase-2/01_sklearn_fundamentals.py))
 - **Урок 02** — Лінійна регресія sklearn: closed-form vs GD, `.coef_`/R², scaling, multicollinearity ([docs](docs/phase-2-classical-ml/02-linear-regression.md), [memories](memories/lessons/03-02-linear-regression.md), [код](code/phase-2/02_linear_regression.py))
+- **Урок 03** — Логістична регресія: sigmoid, decision boundary, `.predict()`/`.predict_proba()`, `ColumnTransformer`+`Pipeline`, знак `.coef_`, accuracy на незбалансованих класах ([docs](docs/phase-2-classical-ml/03-logistic-regression.md), [memories](memories/lessons/03-03-logistic-regression.md), [код](code/phase-2/03_logistic_regression.py), датасет Telco Customer Churn у `data/raw/`)
+- **Урок 04** — Метрики класифікації: confusion matrix, precision/recall/F1, ROC-AUC, threshold tuning ([docs](docs/phase-2-classical-ml/04-classification-metrics.md), [memories](memories/lessons/03-04-classification-metrics.md), [код](code/phase-2/04_classification_metrics.py))
 
 ## Portfolio-об'єкти (що народиться пізніше, природно)
 
