@@ -19,10 +19,18 @@ lessons/
 memories/
 
 # ─── Local tooling settings ─────────────────────────────────────────
-# Ігноруємо все в .claude/ окрім /commands/ — команди частина проєкту,
-# налаштування локальні.
+# Ігноруємо все в .claude/ окрім /commands/, /progress/ (трекер прогресу) і
+# спільних settings.json — це частина проєкту. Локальні налаштування ігноруємо.
 .claude/*
 !.claude/commands/
+!.claude/progress/
+!.claude/settings.json
+# ...але runtime-дані трекера (лог часу + згенерований звіт + вказівник фази) — не комітимо.
+.claude/progress/events.jsonl
+.claude/progress/report.html
+
+.claude/progress/report2.html
+.claude/progress/current_phase
 
 # ─── Voice-agent runtime data ───────────────────────────────────────
 # Транскрипти голосових сесій можуть містити особисту інформацію

@@ -1,0 +1,56 @@
+{
+  "project": "ML Learning",
+  "generated_from": "ROADMAP.md + PROGRESS.md",
+  "current_phase": "phase-2",
+  "phases": [
+    {
+      "id": "phase-0",
+      "name": "Фаза 0",
+      "subtitle": "Python та інструменти",
+      "total": 7,
+      "done": 7
+    },
+    {
+      "id": "phase-1",
+      "name": "Фаза 1",
+      "subtitle": "Математика для ML",
+      "total": 8,
+      "done": 5
+    },
+    {
+      "id": "phase-2",
+      "name": "Фаза 2",
+      "subtitle": "Класичний ML",
+      "total": 9,
+      "done": 4
+    },
+    {
+      "id": "phase-3",
+      "name": "Фаза 3",
+      "subtitle": "Deep Learning",
+      "total": null,
+      "done": 0
+    },
+    {
+      "id": "phase-4",
+      "name": "Фаза 4",
+      "subtitle": "LLM та GenAI",
+      "total": null,
+      "done": 0
+    },
+    {
+      "id": "phase-5",
+      "name": "Фаза 5",
+      "subtitle": "MLOps та продакшн",
+      "total": null,
+      "done": 0
+    },
+    {
+      "id": "phase-6",
+      "name": "Фаза 6",
+      "subtitle": "Портфоліо",
+      "total": null,
+      "done": 0
+    }
+  ]
+}
