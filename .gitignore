@@ -22,6 +22,8 @@ memories/
 # Ігноруємо все в .claude/ окрім /commands/, /progress/ (трекер прогресу) і
 # спільних settings.json — це частина проєкту. Локальні налаштування ігноруємо.
 .claude/*
+!.claude/prompts/
+!.claude/hooks/
 !.claude/commands/
 !.claude/progress/
 !.claude/settings.json
@@ -95,3 +97,6 @@ mlruns/
 wandb/
 lightning_logs/
 tensorboard/
+
+# raw conversation archive (auto, not curated)
+memories/conversations/
