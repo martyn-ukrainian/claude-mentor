@@ -1,6 +1,8 @@
 # PROGRESS
 
-**Поточна фаза:** Фаза 0 ✅ **completed** → Фаза 1 (математика) **на паузі, 5/8 уроків** → **Фаза 2 в процесі, 4/9+capstone**
+**Поточна фаза:** Фаза 0 ✅ **completed** → Фаза 1 (математика) **на паузі, 5/8 уроків** → **Фаза 2 в процесі, 5/9+capstone**
+
+**Рішення від 2026-07-30 (втрата й відновлення записів Уроку 05):** Урок 05 (дерева/RF) було фактично пройдено раніше (~28.07), але записи `/end-lesson` (docs, memories, оновлення трекера) загубились — їх не було ні в git-історії, ні в `reflog`, ні в `stash` (лишився тільки код `code/phase-2/05_trees_random_forest.py`). Студент обрав **перепройти урок з нуля** новим файлом `code/phase-2/05_1_trees_random_forest.py` — і воно ж спрацювало як retrieval. Урок закрито 30.07 з повними записами.
 
 **Рішення від 2026-07-19:** `lessons/phase-2/` розгорнуто в 9 уроків + capstone (README + методика). Урок 01 (sklearn fundamentals) і Урок 02 (лінійна регресія sklearn, closed-form vs GD, R², multicollinearity) — пройдено.
 
@@ -24,7 +26,7 @@
 
 **Висновок:** готовий рухатись до Фази 2. "Некомутативність словами" — приймаємо як стабільну, некритичну прогалину (механіка ідеальна), не блокуючий фактор.
 
-**Де зупинились:** Фаза 2, Урок 04 (метрики класифікації: confusion matrix, precision/recall/F1, ROC-AUC, threshold tuning) — пройдено 25.07, та сама сесія одразу після Уроку 03. **Наступний крок — Урок 05 Фази 2 (дерева рішень, Random Forest)** — метрики Уроку 04 (recall, F1) стануть інструментом порівняння моделей.
+**Де зупинились:** Фаза 2, Урок 05 (дерева рішень, Random Forest) — пройдено 30.07 (перепройдено після втрати записів, див. рішення вгорі). Overfitting наживо, bagging/голосування, `feature_importances_` + пастка корельованих фіч, scaling деревам не потрібен. **Наступний крок — Урок 06 Фази 2 (Gradient Boosting: XGBoost / LightGBM)** — наступний ансамбль після bagging, вже boosting-логіка (дерева одне за одним виправляють помилки попередніх, не голосують паралельно).
 
 **Сильна сесія:** студент самостійно придумав числові приклади для precision/recall і самостійно вивів чому accuracy=94% оманлива (розчинення помилки міноритарного класу) — обидва глибше за мінімальний критерій уроку. Єдина нова прогалина — плутанина AUC vs threshold (див. `voice-retrieval-queue.md`).
 
@@ -112,6 +114,7 @@
 - **Урок 02** — Лінійна регресія sklearn: closed-form vs GD, `.coef_`/R², scaling, multicollinearity ([docs](docs/phase-2-classical-ml/02-linear-regression.md), [memories](memories/lessons/03-02-linear-regression.md), [код](code/phase-2/02_linear_regression.py))
 - **Урок 03** — Логістична регресія: sigmoid, decision boundary, `.predict()`/`.predict_proba()`, `ColumnTransformer`+`Pipeline`, знак `.coef_`, accuracy на незбалансованих класах ([docs](docs/phase-2-classical-ml/03-logistic-regression.md), [memories](memories/lessons/03-03-logistic-regression.md), [код](code/phase-2/03_logistic_regression.py), датасет Telco Customer Churn у `data/raw/`)
 - **Урок 04** — Метрики класифікації: confusion matrix, precision/recall/F1, ROC-AUC, threshold tuning ([docs](docs/phase-2-classical-ml/04-classification-metrics.md), [memories](memories/lessons/03-04-classification-metrics.md), [код](code/phase-2/04_classification_metrics.py))
+- **Урок 05** — Дерева рішень + Random Forest: overfitting (deep vs shallow tree), bagging/random feature subsets/голосування, `feature_importances_` + пастка корельованих фіч, чому деревам не потрібен scaling ([docs](docs/phase-2-classical-ml/05-trees-random-forest.md), [memories](memories/lessons/03-05-trees-random-forest.md), [код](code/phase-2/05_1_trees_random_forest.py)). Перепройдено 30.07 після втрати записів першого проходу.
 
 ## Portfolio-об'єкти (що народиться пізніше, природно)
 
