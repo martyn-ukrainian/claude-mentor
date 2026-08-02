@@ -383,9 +383,10 @@ TEMPLATE = """<!doctype html>
 * {{ box-sizing:border-box; }}
 body {{ margin:0; background:var(--bg); color:var(--ink);
   font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; }}
-.page {{ max-width:1020px; margin:0 auto; padding:3.5rem 1.5rem 5rem; }}
+.page {{ max-width:1240px; margin:0 auto;
+  padding:clamp(1.8rem,4vw,3.5rem) clamp(1rem,3vw,1.5rem) calc(5rem + env(safe-area-inset-bottom,0px)); }}
 .eyebrow {{ font-size:.72rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:0 0 .6rem; }}
-h1 {{ font-family:ui-serif,Georgia,"Times New Roman",serif; font-weight:500; font-size:2.1rem; line-height:1.15; margin:0; text-wrap:balance; }}
+h1 {{ font-family:ui-serif,Georgia,"Times New Roman",serif; font-weight:500; font-size:clamp(1.55rem,3.2vw,2.1rem); line-height:1.15; margin:0; text-wrap:balance; }}
 h2 {{ font-family:ui-serif,Georgia,serif; font-weight:500; font-size:1.15rem; margin:0; }}
 .head {{ display:grid; grid-template-columns:1fr auto; align-items:end; gap:1.2rem 2.5rem; }}
 .num {{ font-family:ui-monospace,"SF Mono",Menlo,monospace; font-variant-numeric:tabular-nums; font-size:1.9rem; font-weight:600; letter-spacing:-.02em; line-height:1.1; }}
@@ -400,15 +401,36 @@ h2 {{ font-family:ui-serif,Georgia,serif; font-weight:500; font-size:1.15rem; ma
 
 .chart-section {{ margin:2.4rem 0 0; }}
 .chart-section h2 {{ margin-bottom:.9rem; }}
-.chart-section svg {{ display:block; width:330px; max-width:100%; height:auto; }}
+.chart-section svg {{ display:block; width:100%; max-width:480px; height:auto; }}
 svg .grid {{ stroke:var(--rule); stroke-width:1; }}
 svg .tick {{ fill:var(--muted); font-family:ui-monospace,"SF Mono",Menlo,monospace; font-size:11px; }}
 svg .area {{ fill:var(--ink); opacity:.05; }}
 svg .line {{ stroke:var(--ink-soft); stroke-width:1.5; stroke-linejoin:round; }}
 
-.layout {{ display:grid; grid-template-columns:400px 1fr; gap:3.4rem; align-items:start;
+.layout {{ display:grid; grid-template-columns:minmax(340px,420px) 1fr; gap:clamp(2.2rem,4vw,3.4rem); align-items:start;
   margin-top:2.6rem; padding-top:2.2rem; border-top:1px solid var(--rule); }}
-@media (max-width:860px) {{ .layout {{ grid-template-columns:1fr; gap:2.4rem; }} }}
+/* Планшет: одна колонка, але donut і чарт стають поруч, шрифти й бари більші під палець */
+@media (max-width:1024px) {{
+  .layout {{ grid-template-columns:1fr; gap:2.6rem; }}
+  .progress-side {{ display:grid; grid-template-columns:1fr 1fr; column-gap:3rem; align-items:start; }}
+  .progress-side > .progress-head, .progress-side > .ph-row, .progress-side > .forecast {{ grid-column:1 / -1; }}
+  .ph-top {{ font-size:.85rem; }}
+  .d-leg {{ font-size:.85rem; }}
+  .ph-bar {{ height:8px; }}
+  .row {{ padding:.7rem 0; }}
+  .bar-track {{ height:9px; }}
+  .when {{ font-size:.92rem; }}
+  .when .date {{ font-size:.8rem; }}
+  .dur {{ font-size:.92rem; }}
+  .donut {{ width:150px; height:150px; }}
+}}
+@media (max-width:640px) {{
+  .progress-side {{ display:block; }}
+}}
+/* Нижня панель viewer-а (артефакт/браузер на планшеті) перекриває низ — резервуємо місце */
+@media (pointer:coarse) {{
+  .page {{ padding-bottom:calc(9rem + env(safe-area-inset-bottom,0px)); }}
+}}
 
 .donut-section {{ margin:2.4rem 0 0; }}
 .donut-section h2 {{ margin-bottom:.9rem; }}
