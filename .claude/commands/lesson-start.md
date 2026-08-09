@@ -95,13 +95,9 @@ cd voice && uv run python bot_cli.py --flow tmp/lesson-{topic-slug} > /tmp/voice
 - Ephemeral flow файл лишається в `voice/flows/tmp/` — очиститься на наступному `/end-lesson` або через 24 години
 - Якщо учень скаже "перевір голосову" — читаю транскрипт (`/tmp/voice-lesson-*.log`) і оновлюю `memories/profile.md` за правилами Post-session review з `VOICE-TUTORIALS.md`
 
-## Правило: НЕ комбінувати з `-s` маркером
+## Голос
 
-`voice-claude` (bot_cli.py) використовує **Cartesia** через Pipecat pipeline — природний голос, sonic-3.
-
-`TTS-piper` (той що активується `-s` маркером у промпті) — окрема система, локальний Piper, читає **мою текстову відповідь**. Він потрібен для приватності, але акустично помітно гірший.
-
-**Якщо викликати `/lesson-start` з `-s` — грають ДВА голоси одночасно** (Cartesia inтро + Piper моя відповідь) = каша. Правильно: `/lesson-start` без `-s`. Voice-claude сам все скаже красиво через Cartesia, а я мовчки пишу текст у терміналі.
+`voice-claude` (bot_cli.py) використовує **Cartesia** через Pipecat pipeline — природний голос, sonic-3. Це єдиний голосовий канал: агент говорить, а я паралельно мовчки пишу текст уроку в терміналі.
 
 ## Коли НЕ використовувати
 
