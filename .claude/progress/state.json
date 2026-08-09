@@ -1,7 +1,7 @@
 {
   "project": "ML Learning",
   "generated_from": "ROADMAP.md + PROGRESS.md",
-  "current_phase": "phase-2",
+  "current_phase": "phase-3",
   "phases": [
     {
       "id": "phase-0",
@@ -15,14 +15,14 @@
       "name": "Фаза 1",
       "subtitle": "Математика для ML",
       "total": 8,
-      "done": 5
+      "done": 6
     },
     {
       "id": "phase-2",
       "name": "Фаза 2",
       "subtitle": "Класичний ML",
       "total": 9,
-      "done": 5
+      "done": 9
     },
     {
       "id": "phase-3",
