@@ -38,6 +38,17 @@ TOPICS = {
     date(2026, 7, 21): "Retrieval review",
     date(2026, 7, 24): "Quick touch",
     date(2026, 7, 25): "Lessons 03-04 — logistic regression, classification metrics",
+    date(2026, 7, 26): "Quick touch",
+    date(2026, 7, 27): "Quick touch",
+    date(2026, 7, 28): "Quick touch",
+    date(2026, 7, 30): "Lesson 05 — trees/Random Forest (redone)",
+    date(2026, 7, 31): "Gradient Boosting — loss functions (session start)",
+    date(2026, 8, 3): "Quick touch",
+    date(2026, 8, 4): "Gradient Boosting — mechanics (continued)",
+    date(2026, 8, 7): "Lesson 06 — Gradient Boosting (closed)",
+    date(2026, 8, 8): "Lessons 07-09 — KNN/SVM/NB, regularization/CV, GridSearch/PCA/K-Means — Phase 2 complete",
+    date(2026, 8, 9): "Phase 3 start — Lesson 01, perceptron/neuron/MLP",
+    date(2026, 8, 11): "Lessons 02-03 — ReLU/backprop, PyTorch intro",
 }
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]

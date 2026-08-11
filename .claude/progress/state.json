@@ -28,8 +28,8 @@
       "id": "phase-3",
       "name": "Фаза 3",
       "subtitle": "Deep Learning",
-      "total": null,
-      "done": 0
+      "total": 9,
+      "done": 3
     },
     {
       "id": "phase-4",
