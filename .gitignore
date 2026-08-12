@@ -75,6 +75,7 @@ Thumbs.db
 data/raw/
 data/processed/
 data/interim/
+code/*/data/
 *.parquet
 *.feather
 *.h5
