@@ -19,14 +19,14 @@ ML-інженер ≠ дата-саєнтист. Крім моделей, пот
 
 Мета: писати Python так само впевнено, як TS, і освоїти базовий інструментарій.
 
-- [ ] Python-синтаксис для тих, хто знає іншу мову: типи, comprehensions, генератори, декоратори, context managers
-- [ ] Type hints у Python (`mypy`) — тобі як TS-розробнику зайде легко
-- [ ] Віртуальні середовища: `venv` / `uv` / `conda`, керування залежностями
-- [ ] Jupyter / VS Code notebooks — робочий процес експериментів
-- [ ] `git` для ML-проєктів (гілки, `.gitignore` для даних/моделей)
-- [ ] Основи `NumPy` (масиви, broadcasting, векторизація)
-- [ ] Основи `pandas` (DataFrame, фільтри, groupby, merge)
-- [ ] Візуалізація: `matplotlib` + `seaborn`
+- [x] Python-синтаксис для тих, хто знає іншу мову: типи, comprehensions, генератори, декоратори, context managers
+- [x] Type hints у Python (`mypy`) — тобі як TS-розробнику зайде легко
+- [x] Віртуальні середовища: `venv` / `uv` / `conda`, керування залежностями
+- [x] Jupyter / VS Code notebooks — робочий процес експериментів
+- [x] `git` для ML-проєктів (гілки, `.gitignore` для даних/моделей)
+- [x] Основи `NumPy` (масиви, broadcasting, векторизація)
+- [x] Основи `pandas` (DataFrame, фільтри, groupby, merge)
+- [x] Візуалізація: `matplotlib` + `seaborn`
 
 **Ресурси:** офіційний Python tutorial, "Python for Data Analysis" (Wes McKinney), NumPy/pandas docs.
 **Практика:** взяти CSV-датасет (напр. Titanic) і зробити повний EDA-ноутбук.
@@ -37,11 +37,11 @@ ML-інженер ≠ дата-саєнтист. Крім моделей, пот
 
 Мета: не вивести з нуля всю математику, а розуміти, що відбувається "під капотом" і читати формули без страху.
 
-- [ ] Лінійна алгебра: вектори, матриці, множення, власні значення (3Blue1Brown "Essence of Linear Algebra")
-- [ ] Похідні, градієнти, chain rule (основа backpropagation)
-- [ ] Основи ймовірностей та статистики: розподіли, matematичне сподівання, дисперсія, Байєс
-- [ ] Градієнтний спуск — інтуїція та реалізація вручну на NumPy
-- [ ] Функції втрат (MSE, cross-entropy) — що вони означають
+- [x] Лінійна алгебра: вектори, матриці, множення, власні значення (3Blue1Brown "Essence of Linear Algebra")
+- [x] Похідні, градієнти, chain rule (основа backpropagation)
+- [ ] Основи ймовірностей та статистики: розподіли, matematичне сподівання, дисперсія, Байєс — *Байєс закрито JIT (Фаза 2, Урок 07), E[X]/Var/розподіли ще ні*
+- [x] Градієнтний спуск — інтуїція та реалізація вручну на NumPy
+- [x] Функції втрат (MSE, cross-entropy) — що вони означають
 
 **Ресурси:** 3Blue1Brown (YouTube), "Mathematics for Machine Learning" (Deisenroth, безкоштовна PDF), Khan Academy для прогалин.
 **Порада:** не застрягай надовго. Достатньо "робочого" розуміння — заглиблюйся за потребою.
@@ -52,16 +52,16 @@ ML-інженер ≠ дата-саєнтист. Крім моделей, пот
 
 Мета: розуміти й застосовувати основні алгоритми, знати повний ML-пайплайн.
 
-- [ ] Supervised vs unsupervised, train/validation/test split
-- [ ] Лінійна та логістична регресія
-- [ ] Дерева рішень, Random Forest, Gradient Boosting (XGBoost / LightGBM)
-- [ ] KNN, SVM, наївний Байєс
-- [ ] Кластеризація: K-Means, ієрархічна
-- [ ] Зниження розмірності: PCA
-- [ ] Метрики: accuracy, precision/recall, F1, ROC-AUC, confusion matrix
-- [ ] Перенавчання, регуляризація, крос-валідація
-- [ ] Feature engineering та препроцесинг (`scikit-learn` pipelines)
-- [ ] Підбір гіперпараметрів (GridSearch, Optuna)
+- [x] Supervised vs unsupervised, train/validation/test split
+- [x] Лінійна та логістична регресія
+- [x] Дерева рішень, Random Forest, Gradient Boosting (XGBoost / LightGBM)
+- [x] KNN, SVM, наївний Байєс
+- [x] Кластеризація: K-Means, ієрархічна
+- [x] Зниження розмірності: PCA
+- [x] Метрики: accuracy, precision/recall, F1, ROC-AUC, confusion matrix
+- [x] Перенавчання, регуляризація, крос-валідація
+- [x] Feature engineering та препроцесинг (`scikit-learn` pipelines)
+- [x] Підбір гіперпараметрів (GridSearch, Optuna)
 
 **Ресурси:** Andrew Ng "Machine Learning Specialization" (Coursera), "Hands-On Machine Learning" (Géron) — ключова книга, `scikit-learn` docs.
 **🏆 Проєкт 1:** end-to-end класифікація/регресія на реальному датасеті з Kaggle + звіт.
@@ -72,12 +72,12 @@ ML-інженер ≠ дата-саєнтист. Крім моделей, пот
 
 Мета: розуміти нейромережі й впевнено працювати з фреймворком.
 
-- [ ] Перцептрон, багатошарові мережі, активації, backpropagation
-- [ ] **PyTorch** (індустрійний стандарт) — тензори, autograd, `nn.Module`, тренувальний цикл
-- [ ] Оптимізатори (SGD, Adam), learning rate scheduling, batching
-- [ ] Регуляризація в DL: dropout, batch norm, early stopping
-- [ ] CNN — комп'ютерний зір (класифікація зображень)
-- [ ] RNN/LSTM — основи послідовностей (коротко, як історія)
+- [x] Перцептрон, багатошарові мережі, активації, backpropagation
+- [x] **PyTorch** (індустрійний стандарт) — тензори, autograd, `nn.Module`, тренувальний цикл
+- [x] Оптимізатори (SGD, Adam), learning rate scheduling, batching
+- [x] Регуляризація в DL: dropout, batch norm, early stopping
+- [x] CNN — комп'ютерний зір (класифікація зображень)
+- [x] RNN/LSTM — основи послідовностей (коротко, як історія)
 - [ ] **Transformers** та attention — фундамент сучасного ML (обов'язково!)
 - [ ] Transfer learning та fine-tuning готових моделей
 - [ ] Робота з GPU (Google Colab / Kaggle GPU безкоштовно)
