@@ -79,7 +79,7 @@ ML-інженер ≠ дата-саєнтист. Крім моделей, пот
 - [x] CNN — комп'ютерний зір (класифікація зображень)
 - [x] RNN/LSTM — основи послідовностей (коротко, як історія)
 - [x] **Transformers** та attention — фундамент сучасного ML (обов'язково!)
-- [ ] Transfer learning та fine-tuning готових моделей
+- [x] Transfer learning та fine-tuning готових моделей
 - [ ] Робота з GPU (Google Colab / Kaggle GPU безкоштовно)
 
 **Ресурси:** "Deep Learning Specialization" (Andrew Ng), fast.ai курс, PyTorch tutorials, "The Illustrated Transformer" (Jay Alammar).
