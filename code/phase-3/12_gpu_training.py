@@ -8,9 +8,9 @@ from torch.utils.data import Subset, DataLoader, random_split
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 N_EPOCH = 30
-N_TRAIN_DATA = 500
+N_TRAIN_DATA = 2000
 N_VAL = N_TRAIN_DATA // 5
-PATIENCE_COUNTER = 5
+PATIENCE_COUNTER = 3
 
 model = models.resnet18(weights="IMAGENET1K_V1")
 
@@ -19,7 +19,7 @@ print(sum_params)
 
 model.requires_grad_(False)
 model.fc = nn.Linear(512, 2)
-
+model.layer4.requires_grad_(True)
 model = model.to(device)
 
 trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -53,7 +53,10 @@ print(len(train_subset), len(test_subset))
 print([train_data.targets[i] for i in сat_dog_idx[:10]])
 print(len(сat_dog_idx), сat_dog_idx[:10])
 
-optimizer = torch.optim.Adam([p for p in model.parameters() if p.requires_grad], lr=1e-3)
+optimizer = torch.optim.Adam([
+  {"params": model.fc.parameters(), "lr": 1e-3},     # свіжій голові — сміливий крок
+  {"params": model.layer4.parameters(), "lr": 1e-4}, # чужим вагам — делікатний
+])
 criterion = nn.CrossEntropyLoss()
 
 best_val_loss = float("inf")
