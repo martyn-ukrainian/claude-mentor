@@ -74,3 +74,16 @@ Google Colab / Kaggle: відкрити notebook у браузері → Runtime
 - PyTorch docs: MPS backend (Apple Silicon), CUDA semantics
 - Google Colab — colab.research.google.com (Runtime → GPU)
 - Код: [`code/phase-3/12_gpu_training.py`](../../code/phase-3/12_gpu_training.py)
+
+## Пост-бонус: інференс і перший міні-деплой
+
+Щоб користуватись натренованою моделлю, тренування не потрібне — потрібні лише **архітектура + чекпойнт**:
+
+```python
+model = models.resnet18(weights=None)      # порожня архітектура (ImageNet качати не треба)
+model.fc = nn.Linear(512, 2)
+model.load_state_dict(torch.load("best_model_2.pt"))   # у чекпойнті ВСІ наші ваги
+model.eval()
+```
+
+Фото проходить **той самий transform**, що й тренувальні дані, плюс `unsqueeze(0)` (батч-вимір). `code/phase-3/12b_predict.py` загортає це у FastAPI: `GET /` віддає HTML-форму завантаження, `POST /predict` приймає файл (`Annotated[bytes, File()]`, байти → `io.BytesIO` → PIL) і повертає `{"cat": ..., "dog": ...}` (тензор → `float`, бо тензори не серіалізуються в JSON). Запуск: `uv run uvicorn 12b_predict:app --reload`. Застереження: модель вчилась на розтягнутих 32×32, тому на різких реальних фото точність нижча за 89% (domain shift).
