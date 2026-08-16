@@ -80,7 +80,7 @@ ML-інженер ≠ дата-саєнтист. Крім моделей, пот
 - [x] RNN/LSTM — основи послідовностей (коротко, як історія)
 - [x] **Transformers** та attention — фундамент сучасного ML (обов'язково!)
 - [x] Transfer learning та fine-tuning готових моделей
-- [ ] Робота з GPU (Google Colab / Kaggle GPU безкоштовно)
+- [x] Робота з GPU (Google Colab / Kaggle GPU безкоштовно) — локально MPS (Apple Silicon), ~14× проти CPU
 
 **Ресурси:** "Deep Learning Specialization" (Andrew Ng), fast.ai курс, PyTorch tutorials, "The Illustrated Transformer" (Jay Alammar).
 **🏆 Проєкт 2:** класифікатор зображень на CNN АБО fine-tuning трансформера на своєму датасеті.

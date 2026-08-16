@@ -52,7 +52,7 @@ TOPICS = {
     date(2026, 8, 12): "Lesson 05 + meta-session — CNN convolution, sklearn vs PyTorch",
     date(2026, 8, 13): "Lessons 06-09 closed — CNN MNIST, regularization, RNN/LSTM, attention",
     date(2026, 8, 15): "Lesson 10 — multi-head attention, Transformer block",
-    date(2026, 8, 16): "Lessons 10-11 closed — tiny char-LM on own notes; transfer learning (ResNet18)",
+    date(2026, 8, 16): "Lessons 10-12 closed — tiny char-LM, transfer learning, GPU/MPS — Phase 3 lessons complete",
 }
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
