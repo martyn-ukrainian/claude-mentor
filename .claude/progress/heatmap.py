@@ -48,7 +48,11 @@ TOPICS = {
     date(2026, 8, 7): "Lesson 06 — Gradient Boosting (closed)",
     date(2026, 8, 8): "Lessons 07-09 — KNN/SVM/NB, regularization/CV, GridSearch/PCA/K-Means — Phase 2 complete",
     date(2026, 8, 9): "Phase 3 start — Lesson 01, perceptron/neuron/MLP",
-    date(2026, 8, 11): "Lessons 02-03 — ReLU/backprop, PyTorch intro",
+    date(2026, 8, 11): "Lessons 02-04 — ReLU/backprop, PyTorch intro, optimizers/batching",
+    date(2026, 8, 12): "Lesson 05 + meta-session — CNN convolution, sklearn vs PyTorch",
+    date(2026, 8, 13): "Lessons 06-09 closed — CNN MNIST, regularization, RNN/LSTM, attention",
+    date(2026, 8, 15): "Lesson 10 — multi-head attention, Transformer block",
+    date(2026, 8, 16): "Lesson 10 closed — tiny char-LM trained on own notes",
 }
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]

@@ -78,7 +78,7 @@ ML-інженер ≠ дата-саєнтист. Крім моделей, пот
 - [x] Регуляризація в DL: dropout, batch norm, early stopping
 - [x] CNN — комп'ютерний зір (класифікація зображень)
 - [x] RNN/LSTM — основи послідовностей (коротко, як історія)
-- [ ] **Transformers** та attention — фундамент сучасного ML (обов'язково!)
+- [x] **Transformers** та attention — фундамент сучасного ML (обов'язково!)
 - [ ] Transfer learning та fine-tuning готових моделей
 - [ ] Робота з GPU (Google Colab / Kaggle GPU безкоштовно)
 
